@@ -18,6 +18,10 @@ def get_images(link, class_name, save_dir):
 
     for index, img in enumerate(img_tags):
         image_url = img['src']
+
+        if not image_url or not (image_url.startswith("http://") or image_url.startswith("https://")):
+            continue
+
         image_data = requests.get(image_url).content
 
         with open(os.path.join(save_dir, f"{class_name}_{index}.jpg"), 'wb') as f:
