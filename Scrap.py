@@ -1,15 +1,29 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 
 
-url = "https://www.google.com/search?q=cotton+candy+photoshoot&tbm=isch&ved=2ahUKEwj657uR6sWAAxWInCcCHZHKAZ8Q2-cCegQIABAA&oq=cotton+candy+photosh&gs_lcp=CgNpbWcQARgAMgcIABATEIAEMgcIABATEIAEMggIABAFEB4QEzIICAAQCBAeEBM6BAgjECc6CAgAEAcQHhATOgUIABCABDoECAAQHlDjBljYLGCkM2gAcAB4AIABRIgBogaSAQIxM5gBAKABAaoBC2d3cy13aXotaW1nwAEB&sclient=img&ei=FWrOZLoJiLmewQ-RlYf4CQ&bih=726&biw=1440"
-def getdata(link):
+link = 'https://www.google.com/search?sxsrf=AB5stBjczR_iF1o495RIpyc2D9V3D3b0VQ:1691252190858&q=barbe+%C3%A0+papa&tbm=isch&source=lnms&sa=X&ved=2ahUKEwiJ476w9cWAAxX8dqQEHWYaAa0Q0pQJegQIDBAB&biw=1440&bih=726&dpr=2'
+class_name = 'barbe à papa'
+save_dir = 'Data'
+
+def get_images(link, class_name, save_dir):
     r = requests.get(link)
-    return r.text
+    soup = BeautifulSoup(r.content, 'html.parser')
 
-htmldata = getdata(url)
-soup = BeautifulSoup(htmldata, 'html.parser')
+    img_tags = soup.find_all('img')
+
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+    for index, img in enumerate(img_tags):
+        image_url = img['src']
+        image_data = requests.get(image_url).content
+
+        with open(os.path.join(save_dir, f"{class_name}_{index}.jpg"), 'wb') as f:
+            f.write(image_data)
 
 
-for item in soup.findAll('img'):
-    print(item['src'])
+
+
+get_images(link, class_name, save_dir)
