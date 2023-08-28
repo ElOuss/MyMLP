@@ -130,6 +130,35 @@ class MyMLP:
 
         return loss
 
+    def accuracy_function(y_true, y_pred):
+        correct = 0
+        total = len(y_true)
+
+        for i in range(total):
+            if y_true[i] == y_pred[i]:
+                correct += 1
+        accuracy = correct / total
+
+        return accuracy
+
+    def calculate_accuracy(self, all_samples_inputs: List[List[float]],
+                           all_samples_expected_outputs: List[List[float]]):
+        correct_predictions = 0
+        num_samples = len(all_samples_inputs)
+
+        for i in range(num_samples):
+            predicted_outputs = np.array(self.predict(all_samples_inputs[i], is_classification=True))
+            expected_outputs_i = all_samples_expected_outputs[i]
+
+            # Convert predicted outputs to binary values (-1 or 1) based on threshold
+            binary_predicted = np.sign(predicted_outputs)
+            binary_expected = np.sign(expected_outputs_i)
+
+            if np.array_equal(binary_predicted, binary_expected):
+                correct_predictions += 1
+
+        accuracy = correct_predictions / num_samples
+        return accuracy
 # Test
 
 # Créer une instance de MyMLP avec la structure [2, 3, 1]
