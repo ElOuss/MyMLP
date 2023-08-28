@@ -15,12 +15,11 @@ class MyMLP:
             if layer == 0:
                 continue
 
-            for prev_neurons  in range(npl[layer - 1] + 1):
+            for prev_neurons in range(npl[layer - 1] + 1):
                 self.weights[layer].append([])
                 for curr_neuron in range(npl[layer] + 1):
                     self.weights[layer][prev_neurons].append(
                         0.0 if curr_neuron == 0 else np.random.uniform(-1.0, 1.0))
-
 
         # Create memory space to store neuron output values
         self.X = []
@@ -80,12 +79,10 @@ class MyMLP:
             # Calculating the semi-gradients of neurons in the layer
             for neuron_idx in range(1, self.struct[self.layers] + 1):
                 self.deltas[self.layers][neuron_idx] = (
-                            self.X[self.layers][neuron_idx] - y_k[neuron_idx - 1])
+                        self.X[self.layers][neuron_idx] - y_k[neuron_idx - 1])
                 if is_classification:
                     self.deltas[self.layers][neuron_idx] *= (
-                                1 - self.X[self.layers][neuron_idx] ** 2)
-
-
+                            1 - self.X[self.layers][neuron_idx] ** 2)
 
             # Calculating the semi-gradients of neurons in previous layers recursively
             for layer in reversed(range(1, self.layers + 1)):
@@ -107,13 +104,39 @@ class MyMLP:
                         self.weights[layer][prev_neuron_idx][neuron_idx] -= alpha * self.X[layer - 1][
                             prev_neuron_idx] * self.deltas[layer][neuron_idx]
 
+    def calculate_loss(self, all_samples_inputs: List[List[float]], all_samples_expected_outputs: List[List[float]]):
+
+        total_loss = 0.0
+        num_samples = len(all_samples_inputs)
+        for i in range(num_samples):
+            predicted_outputs = np.array(self.predict(all_samples_inputs[i], is_classification=True))
+            expected_outputs_i = all_samples_expected_outputs[i]
+            # Calculating the negative log-likelihood loss (cross-entropy)
+            loss = -np.sum(expected_outputs_i * np.log(predicted_outputs.flatten() + 1e-10))
+            total_loss += loss
+        average_loss = total_loss / num_samples
+        return average_loss
+
+    def loss_function(self, y_true, y_pred):
+        # Calcule la différence entre les valeurs prédites et les valeurs cibles réelles.
+        difference = y_pred - y_true
+        # Convertir les valeurs cibles réelles et prédites en NumPy arrays.
+        y_true_float = np.array(y_true)
+        y_pred_float = np.array(y_pred)
+
+        # Calcule la fonction de perte de cross-entropy.
+        loss = -np.sum(
+            y_true_float * np.log(y_pred_float + 1e-10) + (1 - y_true_float) * np.log(1 - y_pred_float + 1e-10))
+
+        return loss
+
 # Test
 
 # Créer une instance de MyMLP avec la structure [2, 3, 1]
-#mlp = MyMLP([2, 3, 1])
+# mlp = MyMLP([2, 3, 1])
 
 # Afficher les poids initialisés
-#for layer_idx, layer_weights in enumerate(mlp.weights):
+# for layer_idx, layer_weights in enumerate(mlp.weights):
 #    print(f"Poids pour la couche {layer_idx}:")
- #   for prev_neurons, neuron_weights in enumerate(layer_weights):
-  #      print(f"  Neurone {prev_neurons}:", neuron_weights
+#   for prev_neurons, neuron_weights in enumerate(layer_weights):
+#      print(f"  Neurone {prev_neurons}:", neuron_weights
