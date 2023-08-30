@@ -2,11 +2,11 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-# Lien de la page Google Images pour "barbe à papa"
+# Lien de la page Google Images pour "Barbe à papa"
 link = 'https://www.google.com/search?sxsrf=AB5stBjczR_iF1o495RIpyc2D9V3D3b0VQ:1691252190858&q=barbe+%C3%A0+papa&tbm=isch&source=lnms&sa=X&ved=2ahUKEwiJ476w9cWAAxX8dqQEHWYaAa0Q0pQJegQIDBAB&biw=1440&bih=726&dpr=2'
 
 # Nom de la classe d'images à récupérer
-class_name = 'barbe à papa'
+class_name = 'Barbe à papa'
 
 # Répertoire où les images seront sauvegardées
 save_dir = 'Data'

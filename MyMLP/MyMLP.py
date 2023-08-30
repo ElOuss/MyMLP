@@ -1,6 +1,7 @@
 import numpy as np
 from typing import List
 import os
+import matplotlib.pyplot as plt
 
 class MyMLP:
     def __init__(self, npl: List[int]):
@@ -160,9 +161,26 @@ class MyMLP:
         accuracy = correct_predictions / num_samples
         return accuracy
 
+    def load_images(dataset_path):
+        images = []
+        labels = []
 
+        # Parcours les classes d'images
+        for class_name in os.listdir(dataset_path):
+            for image_name in os.listdir(os.path.join(dataset_path,class_name)):
+                image_paths = [
+                    os.path.join(dataset_path, class_name, image_name)]
 
+        # Charge les images dans des tableaux numpy
+        for image_path in image_paths:
+            image = np.array(plt.imread(image_path))
+            images.append(image)
+            labels.append(class_name)
+
+        # Retourne les listes des images et des labels
+        return images, labels
 # Test
+
 
 # Créer une instance de MyMLP avec la structure [2, 3, 1]
 # mlp = MyMLP([2, 3, 1])
