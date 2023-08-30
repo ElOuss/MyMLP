@@ -170,12 +170,13 @@ class MyMLP:
             for image_name in os.listdir(os.path.join(dataset_path,class_name)):
                 image_paths = [
                     os.path.join(dataset_path, class_name, image_name)]
+                print(image_paths)
 
         # Charge les images dans des tableaux numpy
-        for image_path in image_paths:
-            image = np.array(plt.imread(image_path))
-            images.append(image)
-            labels.append(class_name)
+                for image_path in image_paths:
+                    image = np.array(plt.imread(image_path))
+                    images.append(image)
+                    labels.append(class_name)
 
         # Retourne les listes des images et des labels
         return images, labels
