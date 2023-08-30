@@ -170,16 +170,31 @@ class MyMLP:
             for image_name in os.listdir(os.path.join(dataset_path,class_name)):
                 image_paths = [
                     os.path.join(dataset_path, class_name, image_name)]
-                print(image_paths)
+
 
         # Charge les images dans des tableaux numpy
                 for image_path in image_paths:
                     image = np.array(plt.imread(image_path))
                     images.append(image)
                     labels.append(class_name)
-
         # Retourne les listes des images et des labels
         return images, labels
+
+    def preprocess_images(images, scale):
+        """Prétraite les images."""
+        images = [image / scale for image in images]
+        return images
+
+    def split_dataset(images, labels, train_ratio=0.8):
+        """Découpe le dataset en train set et test set."""
+        n_images = len(images)
+        n_train_images = int(n_images * train_ratio)
+        n_test_images = n_images - n_train_images
+        train_images = images[:n_train_images]
+        train_labels = labels[:n_train_images]
+        test_images = images[n_train_images:]
+        test_labels = labels[n_train_images:]
+        return train_images, train_labels, test_images, test_labels
 # Test
 
 
