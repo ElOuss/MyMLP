@@ -1,6 +1,6 @@
 import numpy as np
 from typing import List
-
+import os
 
 class MyMLP:
     def __init__(self, npl: List[int]):
@@ -159,6 +159,9 @@ class MyMLP:
 
         accuracy = correct_predictions / num_samples
         return accuracy
+
+
+
 # Test
 
 # Créer une instance de MyMLP avec la structure [2, 3, 1]
