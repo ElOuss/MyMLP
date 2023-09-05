@@ -3,13 +3,12 @@ import requests
 from bs4 import BeautifulSoup
 
 # Lien de la page Google Images pour "Barbe à papa"
-link = 'https://www.google.com/search?sxsrf=AB5stBjczR_iF1o495RIpyc2D9V3D3b0VQ:1691252190858&q=barbe+%C3%A0+papa&tbm=isch&source=lnms&sa=X&ved=2ahUKEwiJ476w9cWAAxX8dqQEHWYaAa0Q0pQJegQIDBAB&biw=1440&bih=726&dpr=2'
-
+link = 'https://www.google.com/search?q=churros+chocolat+chaud&tbm=isch&hl=fr&chips=q:churros+chocolat+chaud,online_chips:churros+espagnols:jP46ruH5Ibk%3D&sa=X&ved=2ahUKEwjE14fzy5GBAxWBrUwKHTRMCSIQ4lYoA3oECAEQOg&biw=1440&bih=669'
 # Nom de la classe d'images à récupérer
-class_name = 'Barbe à papa'
+class_name = 'Churros'
 
 # Répertoire où les images seront sauvegardées
-save_dir = 'Data'
+save_dir = os.path.join('data', class_name)
 
 # Fonction pour récupérer les images
 def get_images(link, class_name, save_dir):
@@ -37,7 +36,7 @@ def get_images(link, class_name, save_dir):
 
         # Télécharger l'image et la sauvegarder dans le répertoire approprié avec un nom unique
         image_data = requests.get(image_url).content
-        with open(os.path.join(save_dir, f"{class_name}_{index}.jpg"), 'wb') as f:
+        with open(os.path.join(save_dir, f"{class_name}_{index + 50}.jpg"), 'wb') as f:
             f.write(image_data)
 
 
