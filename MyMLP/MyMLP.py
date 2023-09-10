@@ -105,16 +105,26 @@ class MyMLP:
                         self.weights[layer][prev_neuron_idx][neuron_idx] -= alpha * self.X[layer - 1][
                             prev_neuron_idx] * self.deltas[layer][neuron_idx]
 
+   #def calculate_loss(self, all_samples_inputs: List[List[float]], all_samples_expected_outputs: List[List[float]]):
+
+        #total_loss = 0.0
+        #num_samples = len(all_samples_inputs)
+        #for i in range(num_samples):
+            #predicted_outputs = np.array(self.predict(all_samples_inputs[i], is_classification=True))
+            #expected_outputs_i = all_samples_expected_outputs[i]
+            # Calculating the negative log-likelihood loss (cross-entropy)
+            #loss = -np.sum(expected_outputs_i * np.log(predicted_outputs.flatten() + 1e-10))
+           # total_loss += loss
+        #average_losss = total_loss / num_samples
+        #return average_losss
+
     def calculate_loss(self, all_samples_inputs: List[List[float]], all_samples_expected_outputs: List[List[float]]):
 
         total_loss = 0.0
         num_samples = len(all_samples_inputs)
-        for i in range(num_samples):
-            predicted_outputs = np.array(self.predict(all_samples_inputs[i], is_classification=True))
-            expected_outputs_i = all_samples_expected_outputs[i]
-            # Calculating the negative log-likelihood loss (cross-entropy)
-            loss = -np.sum(expected_outputs_i * np.log(predicted_outputs.flatten() + 1e-10))
-            total_loss += loss
+        for sample_input in all_samples_inputs:
+            for sample_output in all_samples_expected_outputs:
+                total_loss += -sample_output * np.log(sample_input) - (1. - sample_output) * np.log(1. - sample_input)
         average_loss = total_loss / num_samples
         return average_loss
 
@@ -138,7 +148,7 @@ class MyMLP:
         for i in range(total):
             if y_true[i] == y_pred[i]:
                 correct += 1
-        accuracy = correct / total
+        accuracy = float(correct / total)
 
         return accuracy
 
@@ -195,14 +205,3 @@ class MyMLP:
         test_images = images[n_train_images:]
         test_labels = labels[n_train_images:]
         return train_images, train_labels, test_images, test_labels
-# Test
-
-
-# Créer une instance de MyMLP avec la structure [2, 3, 1]
-# mlp = MyMLP([2, 3, 1])
-
-# Afficher les poids initialisés
-# for layer_idx, layer_weights in enumerate(mlp.weights):
-#    print(f"Poids pour la couche {layer_idx}:")
-#   for prev_neurons, neuron_weights in enumerate(layer_weights):
-#      print(f"  Neurone {prev_neurons}:", neuron_weights
