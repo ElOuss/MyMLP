@@ -8,6 +8,7 @@ class MyMLP:
         self.struct = npl
         self.layers = len(npl) - 1
         self.weights = []
+        self.loss =[]
 
         # Initialize weights of the model between -1 and 1 (except for unused weights set to 0)
         for layer in range(self.layers + 1):
@@ -104,19 +105,16 @@ class MyMLP:
                         # Updating the weight using gradient descent
                         self.weights[layer][prev_neuron_idx][neuron_idx] -= alpha * self.X[layer - 1][
                             prev_neuron_idx] * self.deltas[layer][neuron_idx]
+            if it%1000 ==0.0:
+                total_loss = 0
+                for inputs, expected_outputs in zip(all_samples_inputs, all_samples_expected_outputs):
+                    self._propagate(inputs, is_classification = True)
+                    outputs = self.X[self.layers][1:]
+                    example_loss =self.loss_mse(outputs, expected_outputs)
+                    total_loss += example_loss
 
-   #def calculate_loss(self, all_samples_inputs: List[List[float]], all_samples_expected_outputs: List[List[float]]):
-
-        #total_loss = 0.0
-        #num_samples = len(all_samples_inputs)
-        #for i in range(num_samples):
-            #predicted_outputs = np.array(self.predict(all_samples_inputs[i], is_classification=True))
-            #expected_outputs_i = all_samples_expected_outputs[i]
-            # Calculating the negative log-likelihood loss (cross-entropy)
-            #loss = -np.sum(expected_outputs_i * np.log(predicted_outputs.flatten() + 1e-10))
-           # total_loss += loss
-        #average_losss = total_loss / num_samples
-        #return average_losss
+                average_loss = total_loss / len(all_samples_inputs)
+                self.loss.append(average_loss)
 
     def calculate_loss(self, all_samples_inputs: List[List[float]], all_samples_expected_outputs: List[List[float]]):
 
@@ -128,7 +126,7 @@ class MyMLP:
         average_loss = total_loss / num_samples
         return average_loss
 
-    def loss_function(self, y_true, y_pred):
+    def loss_entropy(self, y_pred, y_true):
         # Calcule la différence entre les valeurs prédites et les valeurs cibles réelles.
         difference = y_pred - y_true
         # Convertir les valeurs cibles réelles et prédites en NumPy arrays.
@@ -140,6 +138,14 @@ class MyMLP:
             y_true_float * np.log(y_pred_float + 1e-10) + (1 - y_true_float) * np.log(1 - y_pred_float + 1e-10))
 
         return loss
+
+    def loss_mse(self,outputs, expected_outputs):
+        loss = 0.0
+
+        for output, expected in zip(outputs, expected_outputs):
+            loss += (output - expected) ** 2
+
+        return loss / (2.0 * len(outputs))
 
     def accuracy_function(y_true, y_pred):
         correct = 0
