@@ -184,16 +184,17 @@ class MyMLP:
 
         # Parcours les classes d'images
         for class_name in os.listdir(dataset_path):
-            for image_name in os.listdir(os.path.join(dataset_path,class_name)):
-                image_paths = [
-                    os.path.join(dataset_path, class_name, image_name)]
+            class_path = os.path.join(dataset_path, class_name)
+            if not os.path.isdir(class_path):
+                continue  # Ignore les fichiers qui ne sont pas des répertoires
 
+            for image_name in os.listdir(class_path):
+                image_path = os.path.join(class_path, image_name)
+                # Charge les images dans des tableaux numpy
+                image = np.array(plt.imread(image_path))
+                images.append(image)
+                labels.append(class_name)
 
-        # Charge les images dans des tableaux numpy
-                for image_path in image_paths:
-                    image = np.array(plt.imread(image_path))
-                    images.append(image)
-                    labels.append(class_name)
         # Retourne les listes des images et des labels
         return images, labels
 
@@ -237,3 +238,11 @@ class MyMLP:
         loaded_model.weights = model_data["weights"]
         # Retourne le modèle chargé depuis le fichier JSON.
         return loaded_model
+
+    def flatten_images(images):
+        flattened_images = []
+        for image in images:
+            # Aplatit chaque image en un vecteur de caractéristiques
+            flattened_image = image.reshape(-1)
+            flattened_images.append(flattened_image)
+        return flattened_images
