@@ -2,6 +2,7 @@ import numpy as np
 from typing import List
 import os
 import matplotlib.pyplot as plt
+import json
 
 class MyMLP:
     def __init__(self, npl: List[int]):
@@ -211,3 +212,15 @@ class MyMLP:
         test_images = images[n_train_images:]
         test_labels = labels[n_train_images:]
         return train_images, train_labels, test_images, test_labels
+
+    # Fonction pour sauvegarder le modèle au format JSON
+    def save_model_to_json(model, filename):
+        # Crée un dictionnaire contenant la structure du modèle et ses poids
+        model_data = {
+            "struct": model.struct,
+            "weights": model.weights,
+        }
+        # Ouvre le fichier JSON en mode écriture
+        with open(filename, "w") as json_file:
+            # Écrit les données du modèle dans le fichier JSON
+            json.dump(model_data, json_file)
