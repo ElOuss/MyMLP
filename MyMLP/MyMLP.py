@@ -224,3 +224,16 @@ class MyMLP:
         with open(filename, "w") as json_file:
             # Écrit les données du modèle dans le fichier JSON
             json.dump(model_data, json_file)
+
+    # Fonction pour charger un modèle depuis un fichier JSON
+    def load_model_from_json(filename):
+        # Ouvre le fichier JSON en mode lecture ("r") et l'assigne à la variable json_file.
+        with open(filename, "r") as json_file:
+            # Charge les données JSON depuis le fichier et les assigne à la variable model_data.
+            model_data = json.load(json_file)
+        # Crée une instance de la classe MyMLP en utilisant la structure du modèle dans model_data.
+        loaded_model = MyMLP(model_data["struct"])
+        # Copie les poids du modèle depuis model_data et les assigne à la propriété weights de loaded_model.
+        loaded_model.weights = model_data["weights"]
+        # Retourne le modèle chargé depuis le fichier JSON.
+        return loaded_model
